@@ -135,4 +135,51 @@ public class MyCalendar {
 
 		return builder.toString();
 	}
+
+	/**
+	 * お題1：休日（土日）の前に「*」を表示するようにする。
+	 *        休日以外は「*」の代わりに半角空白を入れる。（横位置を揃えるため）
+	 *        理想形はテストコードを参照。
+	 */
+	public String render(boolean holiday) {
+		int[][] map = mappingDays();
+		// 月の最終日
+		int endOfMonth = endOfMonth();
+
+		StringBuilder builder = new StringBuilder();
+
+		render_for:
+		for (int week = 0; week < 6; week++) { // 週（行）
+			for (int day = 0; day < 7; day++) { // 曜日（列）
+				// 1日より前は空白で埋める
+				if (map[week][day] == 0){
+					builder.append("   ");
+					continue;
+				}
+
+				builder.append(String.format("%2d", map[week][day]));
+
+				// 最終日になったら終了
+				if(map[week][day] == endOfMonth) {
+					builder.append('\n');
+					break render_for; // ループを終える
+				}
+
+				if (day < 6) { // 土曜日以外は日付の後ろに空白を挿入
+					builder.append(' ');
+				}
+			}
+			builder.append('\n');
+		}
+
+		return builder.toString();
+	}
+
+	/**
+	 * お題2：前後の月も一緒にカレンダーにする。
+	 *        理想形はテストコードを参照。
+	 */
+	public String renderWithSide() {
+		return "";
+	}
 }

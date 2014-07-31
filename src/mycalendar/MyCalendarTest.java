@@ -71,4 +71,38 @@ public class MyCalendarTest {
 
 		assertThat(cal.render(), is(except));
 	}
+
+	@Test
+	public void render休日あり() {
+		MyCalendar cal = new MyCalendar(2014, 8);
+
+		String except = "                 1 * 2\n" +
+		                "  3   4   5   6   7   8 * 9\n" +
+				        " 10  11  12  13  14  15 *16\n" +
+		                " 17  18  19  20  21  22 *23\n" +
+				        " 24  25  26  27  28  29 *30\n" +
+		                " 31\n";
+
+		assertThat(cal.render(true), is(except));
+	}
+
+	@Test
+	public void renderWithSide() {
+		MyCalendar cal = new MyCalendar(2014, 8);
+
+		String except = "                1  2\n" +
+		                " 3  4  5  6  7  8  9\n" +
+		                "10 11 12 13 14 15 16\n" +
+		                "17 18 19 20 21 22 23\n" +
+		                "24 25 26 27 28 29 30\n" +
+		                "31\n"                   +
+		                "                1  2\n" +
+		                " 3  4  5  6  7  8  9\n" +
+		                "10 11 12 13 14 15 16\n" +
+		                "17 18 19 20 21 22 23\n" +
+		                "24 25 26 27 28 29 30\n" +
+		                "31\n";
+
+		assertThat(cal.renderWithSide(), is(except));
+	}
 }
