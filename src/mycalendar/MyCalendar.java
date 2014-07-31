@@ -22,6 +22,13 @@ public class MyCalendar {
 	}
 
 	/**
+	 * 描画する。
+	 */
+	public void print() {
+		System.out.println(this.render());
+	}
+
+	/**
 	 * 1日の曜日を取得する。
 	 */
 	public int firstDayOfWeek() {
@@ -57,5 +64,75 @@ public class MyCalendar {
 		default:
 			return -1;
 		}
+	}
+
+	/**
+	 * 配列でカレンダーを組む
+	 */
+	public int[][] mappingDays () {
+		int[][] map = new int[6][7];
+		// 月の最初の日の曜日
+		int firstWeekday = dayOfWeekToInt(firstDayOfWeek());
+		// 月の最終日
+		int endOfMonth = endOfMonth();
+
+		int dayOfCount = 1; // 日付
+
+		// 第1週
+		for(int day = firstWeekday; day < 7; day++) {
+			map[0][day] = dayOfCount;
+			dayOfCount++;
+		}
+
+		// 第2週以降
+		map_for:
+		for(int week = 1; week < 6; week++) { // 週（行）
+			for(int day = 0; day < 7; day++) { // 曜日（列）
+				map[week][day] = dayOfCount;
+				dayOfCount++;
+				if (dayOfCount > endOfMonth) {
+					break map_for; // ループを終える
+				}
+			}
+		}
+
+		return map;
+	}
+
+	/**
+	 * カレンダーを描画する。
+	 */
+	public String render() {
+		int[][] map = mappingDays();
+		// 月の最終日
+		int endOfMonth = endOfMonth();
+
+		StringBuilder builder = new StringBuilder();
+
+		render_for:
+		for (int week = 0; week < 6; week++) { // 週（行）
+			for (int day = 0; day < 7; day++) { // 曜日（列）
+				// 1日より前は空白で埋める
+				if (map[week][day] == 0){
+					builder.append("   ");
+					continue;
+				}
+
+				builder.append(String.format("%2d", map[week][day]));
+
+				// 最終日になったら終了
+				if(map[week][day] == endOfMonth) {
+					builder.append('\n');
+					break render_for; // ループを終える
+				}
+
+				if (day < 6) { // 土曜日以外は日付の後ろに空白を挿入
+					builder.append(' ');
+				}
+			}
+			builder.append('\n');
+		}
+
+		return builder.toString();
 	}
 }
